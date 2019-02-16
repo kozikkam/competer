@@ -1,8 +1,29 @@
-import express from 'express';
-
-export default interface BasicController {
-  path: string;
+export default class BasicController {
   method: string;
+  path: string;
 
-  handle(req: express.Request, res: express.Response, next: Function): void;
+  constructor(method, path) {
+    this.method = method;
+    this.path = path;
+  }
+
+  get validation() {
+    return {};
+  }
+
+  validate(req, res, next, validator) {
+    console.log(req.body);
+    const validate = validator.compile(this.validation);
+    const valid = validate(req.body);
+
+    if (!valid) {
+      throw new Error(validate.errors[0].message);
+    }
+
+    this.handle(req, res, next);
+  }
+
+  handle(req, res, next) {
+    return;
+  }
 }

@@ -25,6 +25,8 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "ajv": "^6.9.1",
+    "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "jest": "^24.1.0",

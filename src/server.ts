@@ -13,23 +13,35 @@ import Database from './database';
 import UserEntity from './user/userEntity';
 
 import ControllerManager from './controllerManager';
-import UserController from './user/userController';
+import UserGetController from './user/get';
+import UserPostController from './user/post';
 
 import { Connection, Repository } from 'typeorm';
 
 import BasicController from './basicController';
 
+import * as bodyParser from 'body-parser';
+import * as Ajv from 'ajv';
+
 async function bootstrap(): Promise<void> {
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded());
+
+  const validator = new Ajv();
+
   const database: Database = new Database();
   const connection: Connection = await database.getConnection([
     UserEntity,
   ]);
   const userRepository: Repository<UserEntity> = connection.getRepository('user');
+  const controllerManager = new ControllerManager(app, validator);
+  const userGetController = new UserGetController<UserEntity>('/user/:id', userRepository);
+  const userPostController = new UserPostController<UserEntity>('/user', userRepository);
   
-  const controllerManager = new ControllerManager(app);
-  const userController = new UserController<UserEntity>('/user', 'get', userRepository);
-  
-  const controllers: Array<BasicController> = [userController];
+  const controllers: Array<BasicController> = [
+    userGetController,
+    userPostController
+  ];
   
   controllerManager.addControllers(controllers);
 
