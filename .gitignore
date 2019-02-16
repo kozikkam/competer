@@ -1,0 +1,6 @@
+node_modules
+history.txt
+build
+coverage
+.env
+.DS_Store
