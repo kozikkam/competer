@@ -12,15 +12,16 @@ export default class UserGetController<Entity> extends BasicController {
     this.repository = repository;
   }
 
-  get validation() {
-    return false;
-  }
-
   async handle(req, res, next) {
-    if (req.params.id) {
-      return res.send(await this.repository.findOne(req.params.id));
-    }
+    let rows;
 
-    return res.send(await this.repository.find());
+    if (req.params.id) {
+      rows = await this.repository.findOne(req.params.id);
+
+      return res.send(rows);
+    }
+    rows = await this.repository.find();
+
+    return res.send(rows);
   }
 }

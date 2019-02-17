@@ -12,7 +12,6 @@ export default class BasicController {
   }
 
   validate(req, res, next, validator) {
-    console.log(req.body);
     const validate = validator.compile(this.validation);
     const valid = validate(req.body);
 

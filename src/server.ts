@@ -35,7 +35,7 @@ async function bootstrap(): Promise<void> {
   ]);
   const userRepository: Repository<UserEntity> = connection.getRepository('user');
   const controllerManager = new ControllerManager(app, validator);
-  const userGetController = new UserGetController<UserEntity>('/user/:id', userRepository);
+  const userGetController = new UserGetController<UserEntity>('/user', userRepository);
   const userPostController = new UserPostController<UserEntity>('/user', userRepository);
   
   const controllers: Array<BasicController> = [

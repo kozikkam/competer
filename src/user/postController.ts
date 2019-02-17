@@ -25,7 +25,8 @@ export default class UserPostController<Entity> extends BasicController {
   }
 
   async handle(req, res, next) {
-    console.log(req.body);
-    return this.repository.create(req.body);
+    const result = await this.repository.create(req.body);
+
+    return res.send(result);
   }
 }
