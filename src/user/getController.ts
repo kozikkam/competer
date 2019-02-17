@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 
-import BasicController from '../basicController';
+import BasicController from '../api/basicController';
 
 export default class UserGetController<Entity> extends BasicController {
   path: string;

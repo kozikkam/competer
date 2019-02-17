@@ -1,24 +1,24 @@
 import * as config from './../config';
-import EnvManager from './envManager';
+import EnvValidator from './config/envValidator';
 
-const envManager = new EnvManager(config.requiredEnvs);
-envManager.validateEnv();
+const envValidator = new EnvValidator(config.requiredEnvs);
+envValidator.validateEnv();
 
 import * as express from 'express';
 
 const app = express();
 const port = 3000;
 
-import Database from './database';
+import Database from './database/database';
 import UserEntity from './user/userEntity';
 
-import ControllerManager from './controllerManager';
-import UserGetController from './user/get';
-import UserPostController from './user/post';
+import ControllerManager from './api/controllerManager';
+import UserGetController from './user/getController';
+import UserPostController from './user/postController';
 
 import { Connection, Repository } from 'typeorm';
 
-import BasicController from './basicController';
+import BasicController from './api/basicController';
 
 import * as bodyParser from 'body-parser';
 import * as Ajv from 'ajv';
