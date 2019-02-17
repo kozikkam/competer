@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
+import ParticipantEntity from './../participant/participantEntity';
 
 @Entity()
 export default class User {
@@ -13,4 +15,7 @@ export default class User {
 
     @Column()
     elo: number;
+
+    @OneToMany(type => ParticipantEntity, participant => participant.user)
+    participants?: ParticipantEntity[];
 }

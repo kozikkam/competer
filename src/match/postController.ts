@@ -1,14 +1,14 @@
 import { Repository } from 'typeorm';
 
 import BasicController from '../api/basicController';
-import UserEntity from './userEntity';
+import MatchEntity from './matchEntity';
 
-export default class UserPostController extends BasicController {
+export default class MatchPostController extends BasicController {
   path: string;
   method: string;
-  repository: Repository<UserEntity>;
+  repository: Repository<MatchEntity>;
 
-  constructor(path: string, repository: Repository<UserEntity>) {
+  constructor(path: string, repository: Repository<MatchEntity>) {
     super('POST', path);
     this.repository = repository;
   }
@@ -16,11 +16,8 @@ export default class UserPostController extends BasicController {
   get validation() {
     return {
       type: 'object',
-      required: ['firstName', 'lastName', 'elo'],
+      required: [],
       properties: {
-        firstName: { type: 'string' },
-        lastName: { type: 'string' },
-        elo: { type: 'number' },
         participants: { type: 'number' },
       }
     };
