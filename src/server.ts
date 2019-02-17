@@ -7,7 +7,7 @@ envValidator.validateEnv();
 import * as express from 'express';
 
 const app = express();
-const port = 3000;
+const port = process.env.SERVER_PORT || 3000;
 
 import Database from './database/database';
 import UserEntity from './user/userEntity';
@@ -52,8 +52,8 @@ async function bootstrap(): Promise<void> {
 
   const teamPostController = new TeamPostController('/team', teamRepository);
 
-  const matchPostController = new MatchPostController('/match/:id?', matchRepository);
-  const matchGetController = new MatchGetController('/match', matchRepository);
+  const matchPostController = new MatchPostController('/match', matchRepository);
+  const matchGetController = new MatchGetController('/match/:id?', matchRepository);
 
   const participantPostController = new ParticipantPostController('/participant', participantRepository);
   
