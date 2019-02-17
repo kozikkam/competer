@@ -1,13 +1,14 @@
 import { Repository } from 'typeorm';
 
 import BasicController from '../api/basicController';
+import UserEntity from './userEntity';
 
-export default class UserPostController<Entity> extends BasicController {
+export default class UserPostController extends BasicController {
   path: string;
   method: string;
-  repository: Repository<Entity>;
+  repository: Repository<UserEntity>;
 
-  constructor(path: string, repository: Repository<Entity>) {
+  constructor(path: string, repository: Repository<UserEntity>) {
     super('POST', path);
     this.repository = repository;
   }
