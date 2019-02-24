@@ -17,11 +17,11 @@ export default class UserGetController extends BasicController {
     let rows;
 
     if (req.params.id) {
-      rows = await this.repository.findOne({ where: { id: req.params.id }, relations: ['participants'] });
+      rows = await this.repository.findOne({ where: { id: req.params.id }, relations: ['participants', 'user'] });
 
       return res.send(rows);
     }
-    rows = await this.repository.find({ relations: ['participants'] });
+    rows = await this.repository.find({ relations: ['participants', 'participants.user'] });
 
     return res.send(rows);
   }

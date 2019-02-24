@@ -19,6 +19,6 @@ export default class Match {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToMany(type => ParticipantEntity, participant => participant.match)
-    participants?: ParticipantEntity[];
+    @OneToMany(type => ParticipantEntity, participant => participant.match, { cascade: true })
+    participants: ParticipantEntity[];
 }

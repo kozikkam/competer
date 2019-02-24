@@ -11,14 +11,12 @@ const port = process.env.SERVER_PORT || 3000;
 
 import Database from './database/database';
 import UserEntity from './user/userEntity';
-import TeamEntity from './team/teamEntity';
 import MatchEntity from './match/matchEntity';
 import ParticipantEntity from './participant/participantEntity';
 
 import ControllerManager from './api/controllerManager';
 import UserGetController from './user/getController';
 import UserPostController from './user/postController';
-import TeamPostController from './team/postController';
 import ParticipantPostController from './participant/postController';
 import MatchPostController from './match/postController';
 import MatchGetController from './match/getController';
@@ -37,22 +35,18 @@ async function bootstrap(): Promise<void> {
   const database: Database = new Database();
   const connection: Connection = await database.getConnection([
     UserEntity,
-    TeamEntity,
     MatchEntity,
     ParticipantEntity,
   ]);
 
   const userRepository: Repository<UserEntity> = connection.getRepository('user');
-  const teamRepository: Repository<TeamEntity> = connection.getRepository('team');
   const matchRepository: Repository<MatchEntity> = connection.getRepository('match');
   const participantRepository: Repository<ParticipantEntity> = connection.getRepository('participant');
 
   const userGetController = new UserGetController('/user/:id?', userRepository);
   const userPostController = new UserPostController('/user', userRepository);
 
-  const teamPostController = new TeamPostController('/team', teamRepository);
-
-  const matchPostController = new MatchPostController('/match', matchRepository);
+  const matchPostController = new MatchPostController('/match', matchRepository, participantRepository, eloCalculator);
   const matchGetController = new MatchGetController('/match/:id?', matchRepository);
 
   const participantPostController = new ParticipantPostController('/participant', participantRepository);
@@ -60,7 +54,6 @@ async function bootstrap(): Promise<void> {
   const controllers: Array<BasicController> = [
     userGetController,
     userPostController,
-    teamPostController,
     matchPostController,
     matchGetController,
     participantPostController,
