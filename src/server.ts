@@ -17,9 +17,11 @@ import ParticipantEntity from './participant/participantEntity';
 import ControllerManager from './api/controllerManager';
 import UserGetController from './user/getController';
 import UserPostController from './user/postController';
-import ParticipantPostController from './participant/postController';
 import MatchPostController from './match/postController';
 import MatchGetController from './match/getController';
+
+import EloCalculator from './utils/eloCalculator';
+import EloUpdater from './utils/eloUpdater';
 
 import { Connection, Repository } from 'typeorm';
 
@@ -43,20 +45,20 @@ async function bootstrap(): Promise<void> {
   const matchRepository: Repository<MatchEntity> = connection.getRepository('match');
   const participantRepository: Repository<ParticipantEntity> = connection.getRepository('participant');
 
+  const eloCalculator = new EloCalculator(32);
+  const eloUpdater = new EloUpdater(userRepository);
+
   const userGetController = new UserGetController('/user/:id?', userRepository);
   const userPostController = new UserPostController('/user', userRepository);
 
-  const matchPostController = new MatchPostController('/match', matchRepository, participantRepository, eloCalculator);
+  const matchPostController = new MatchPostController('/match', matchRepository, participantRepository, userRepository, eloCalculator, eloUpdater);
   const matchGetController = new MatchGetController('/match/:id?', matchRepository);
-
-  const participantPostController = new ParticipantPostController('/participant', participantRepository);
   
   const controllers: Array<BasicController> = [
     userGetController,
     userPostController,
     matchPostController,
     matchGetController,
-    participantPostController,
   ];
   
   const validator = new Ajv();

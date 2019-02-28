@@ -17,6 +17,6 @@ export default class Participant {
     @Column()
     winner?: boolean;
 
-    @Column()
+    @Column({ nullable: true })
     eloChange?: number;
 }
