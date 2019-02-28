@@ -5,7 +5,6 @@ import UserEntity from './userEntity';
 
 export default class UserPostController extends BasicController {
   path: string;
-  method: string;
   repository: Repository<UserEntity>;
 
   constructor(path: string, repository: Repository<UserEntity>) {

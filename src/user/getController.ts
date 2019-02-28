@@ -5,7 +5,6 @@ import UserEntity from './userEntity';
 
 export default class UserGetController extends BasicController {
   path: string;
-  method: string;
   repository: Repository<UserEntity>;
 
   constructor(path: string, repository: Repository<UserEntity>) {
@@ -21,7 +20,7 @@ export default class UserGetController extends BasicController {
 
       return res.send(rows);
     }
-    rows = await this.repository.find({ relations: ['participants', 'participants.match'] });
+    rows = await this.repository.find({ order: { elo: 'DESC' }});
 
     return res.send(rows);
   }

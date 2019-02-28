@@ -28,6 +28,7 @@ export default class EloUpdater implements EloUpdaterInterface {
 
     participant.eloChange = eloChange;
     participant.user.elo += eloChange;
+    participant.newElo = participant.user.elo;
 
     await this.userRepository.save(participant.user);
   }

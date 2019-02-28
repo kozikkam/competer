@@ -5,7 +5,6 @@ import MatchEntity from './matchEntity';
 
 export default class UserGetController extends BasicController {
   path: string;
-  method: string;
   repository: Repository<MatchEntity>;
 
   constructor(path: string, repository: Repository<MatchEntity>) {

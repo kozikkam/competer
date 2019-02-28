@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Column,
 } from 'typeorm';
 
 import ParticipantEntity from './../participant/participantEntity';
@@ -18,6 +19,9 @@ export default class Match {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column({ default: new Date() })
+    date?: Date;
 
     @OneToMany(type => ParticipantEntity, participant => participant.match, { cascade: true })
     participants: ParticipantEntity[];

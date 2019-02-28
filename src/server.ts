@@ -1,3 +1,6 @@
+import * as bodyParser from 'body-parser';
+import * as Ajv from 'ajv';
+
 import * as config from './../config';
 import EnvValidator from './config/envValidator';
 
@@ -20,6 +23,8 @@ import UserPostController from './user/postController';
 import MatchPostController from './match/postController';
 import MatchGetController from './match/getController';
 
+import MatchCreator from './match/matchCreator';
+
 import EloCalculator from './utils/eloCalculator';
 import EloUpdater from './utils/eloUpdater';
 
@@ -27,8 +32,8 @@ import { Connection, Repository } from 'typeorm';
 
 import BasicController from './api/basicController';
 
-import * as bodyParser from 'body-parser';
-import * as Ajv from 'ajv';
+import MatchSeeder from './seed/matchSeeder';
+import UserSeeder from './seed/userSeeder';
 
 async function bootstrap(): Promise<void> {
   app.use(bodyParser.json());
@@ -45,13 +50,16 @@ async function bootstrap(): Promise<void> {
   const matchRepository: Repository<MatchEntity> = connection.getRepository('match');
   const participantRepository: Repository<ParticipantEntity> = connection.getRepository('participant');
 
-  const eloCalculator = new EloCalculator(32);
+  const eloCalculator = new EloCalculator(100);
   const eloUpdater = new EloUpdater(userRepository);
+  const matchCreator = new MatchCreator(
+    matchRepository, participantRepository, userRepository, eloCalculator, eloUpdater,
+  );
 
   const userGetController = new UserGetController('/user/:id?', userRepository);
   const userPostController = new UserPostController('/user', userRepository);
 
-  const matchPostController = new MatchPostController('/match', matchRepository, participantRepository, userRepository, eloCalculator, eloUpdater);
+  const matchPostController = new MatchPostController('/match', matchCreator);
   const matchGetController = new MatchGetController('/match/:id?', matchRepository);
   
   const controllers: Array<BasicController> = [
@@ -65,8 +73,18 @@ async function bootstrap(): Promise<void> {
   const controllerManager = new ControllerManager(app, validator);
   controllerManager.addControllers(controllers);
 
-  app.listen(port, () => {
+  app.listen(port, async () => {
     console.log(`app listening on port ${port}`);
+
+    /*
+    const seedData = require('./database/seedData');
+    const userSeeder = new UserSeeder(seedData.users, userRepository);
+    const matchSeeder = new MatchSeeder(seedData.matches, matchRepository, userRepository, participantRepository, matchCreator);
+    console.log('seeding users...');
+    await userSeeder.seed();
+    console.log('seeding matches...');
+    await matchSeeder.seed();
+    */
   });
 }
 

@@ -15,6 +15,12 @@ export default class Participant {
     match: MatchEntity;
 
     @Column()
+    previousElo: number;
+
+    @Column()
+    newElo?: number;
+
+    @Column()
     winner?: boolean;
 
     @Column({ nullable: true })
