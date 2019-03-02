@@ -41,10 +41,6 @@ export default class EloCalculator implements EloCalculatorInterface {
     return ratings.map(rating => Math.pow(10, rating / 400));
   }
 
-  getScores(group1, group2): Array<number> {
-    return group1[0].winner ? [1, 0] : [0, 1];
-  }
-
   getExpectedScores(transformedRatings): Array<number> {
     const result = [];
     const elo1 = transformedRatings[0];

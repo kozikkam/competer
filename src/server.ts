@@ -76,7 +76,6 @@ async function bootstrap(): Promise<void> {
   app.listen(port, async () => {
     console.log(`app listening on port ${port}`);
 
-    /*
     const seedData = require('./database/seedData');
     const userSeeder = new UserSeeder(seedData.users, userRepository);
     const matchSeeder = new MatchSeeder(seedData.matches, matchRepository, userRepository, participantRepository, matchCreator);
@@ -84,7 +83,6 @@ async function bootstrap(): Promise<void> {
     await userSeeder.seed();
     console.log('seeding matches...');
     await matchSeeder.seed();
-    */
   });
 }
 
