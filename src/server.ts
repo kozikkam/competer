@@ -40,11 +40,7 @@ async function bootstrap(): Promise<void> {
   app.use(bodyParser.urlencoded());
 
   const database: Database = new Database();
-  const connection: Connection = await database.getConnection([
-    UserEntity,
-    MatchEntity,
-    ParticipantEntity,
-  ]);
+  const connection: Connection = await database.getConnection();
 
   const userRepository: Repository<UserEntity> = connection.getRepository('user');
   const matchRepository: Repository<MatchEntity> = connection.getRepository('match');
@@ -77,12 +73,12 @@ async function bootstrap(): Promise<void> {
     console.log(`app listening on port ${port}`);
 
     const seedData = require('./database/seedData');
-    const userSeeder = new UserSeeder(seedData.users, userRepository);
-    const matchSeeder = new MatchSeeder(seedData.matches, matchRepository, userRepository, participantRepository, matchCreator);
+    const userSeeder = new UserSeeder(userRepository);
+    const matchSeeder = new MatchSeeder(userRepository, matchCreator);
     console.log('seeding users...');
-    await userSeeder.seed();
+    await userSeeder.seed(seedData.users);
     console.log('seeding matches...');
-    await matchSeeder.seed();
+    await matchSeeder.seed(seedData.matches);
   });
 }
 

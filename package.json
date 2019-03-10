@@ -19,9 +19,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
-    "start": "node ./build/src/server.js",
+    "start:dev": "export NODE_ENV=dev && node ./build/src/server.js",
+    "start:prod": "export NODE_ENV=prod && node ./build/src/server.js",
     "lint": "tslint -t stylish --project \"tsconfig.json\"",
-    "test": "jest --coverage",
+    "test": "export NODE_ENV=test && jest --coverage",
     "test:watch": "jest --watch"
   },
   "dependencies": {

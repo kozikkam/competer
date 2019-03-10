@@ -3,5 +3,7 @@ history.txt
 src/database/seedData.ts
 build
 coverage
+.env.**
 .env
+!.env.example
 .DS_Store
