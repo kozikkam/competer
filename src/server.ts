@@ -1,4 +1,5 @@
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
 import * as Ajv from 'ajv';
 
 import * as config from './../config';
@@ -32,12 +33,12 @@ import { Connection, Repository } from 'typeorm';
 
 import BasicController from './api/basicController';
 
-import MatchSeeder from './seed/matchSeeder';
-import UserSeeder from './seed/userSeeder';
+import Seeder from './seed/seeder';
 
 async function bootstrap(): Promise<void> {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded());
+  app.use(cookieParser());
 
   const database: Database = new Database();
   const connection: Connection = await database.getConnection();
@@ -72,13 +73,8 @@ async function bootstrap(): Promise<void> {
   app.listen(port, async () => {
     console.log(`app listening on port ${port}`);
 
-    const seedData = require('./database/seedData');
-    const userSeeder = new UserSeeder(userRepository);
-    const matchSeeder = new MatchSeeder(userRepository, matchCreator);
-    console.log('seeding users...');
-    await userSeeder.seed(seedData.users);
-    console.log('seeding matches...');
-    await matchSeeder.seed(seedData.matches);
+    const seeder = new Seeder(userRepository, matchCreator);
+    await seeder.seed();
   });
 }
 
