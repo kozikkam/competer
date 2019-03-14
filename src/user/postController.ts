@@ -42,8 +42,8 @@ export default class UserPostController extends BasicController {
       user.salt = salt;
     }
 
-    this.repository.save(user);
+    const savedUser = await this.repository.save(user);
 
-    return res.send(user);
+    return res.send(savedUser);
   }
 }
