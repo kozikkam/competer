@@ -3,6 +3,7 @@ module.exports = {
     'DB_HOST',
     'DB_USERNAME',
     'DB_PASSWORD',
-    'DB_NAME'
+    'DB_NAME',
+    'JWT_SECRET',
   ]
 }

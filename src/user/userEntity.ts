@@ -13,6 +13,15 @@ export default class User {
     @Column()
     lastName: string;
 
+    @Column({ nullable: true, unique: true })
+    email: string;
+
+    @Column({ nullable: true })
+    password: string;
+
+    @Column({ nullable: true })
+    salt: string;
+
     @RelationCount((user: User) => user.participants)
     matchCount: number;
 
