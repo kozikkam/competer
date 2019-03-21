@@ -16,7 +16,20 @@ export default class MatchGetController extends BasicController {
     let rows;
 
     if (req.params.id) {
-      rows = await this.repository.findOne({ where: { id: req.params.id }, relations: ['participants', 'participants.user'] });
+      rows = await this.repository
+        .createQueryBuilder('match')
+        .select([
+          'match.date',
+          'participant.previousElo',
+          'participant.newElo',
+          'participant.eloChange',
+          'user.firstName',
+          'user.lastName',
+        ])
+        .leftJoin('match.participants', 'participant')
+        .leftJoin('participant.user', 'user')
+        .where({ id: req.params.id })
+        .getOne();
 
       return res.send(rows);
     }
