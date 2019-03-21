@@ -1,11 +1,11 @@
 import { Repository } from 'typeorm';
 
-import ParticipantEntity from './../participant/participantEntity';
-import UserEntity from './../user/userEntity';
+import { Participant } from './../participant';
+import { User } from './../user';
 
-export default interface EloUpdaterInterface {
-  userRepository: Repository<UserEntity>;
+export interface EloUpdaterInterface {
+  userRepository: Repository<User>;
 
-  updateAll(participants: Array<ParticipantEntity>, value: number): void;
-  updateSingle(participant: ParticipantEntity, value: number): void;
+  updateAll(participants: Array<Participant>, value: number): void;
+  updateSingle(participant: Participant, value: number): void;
 }

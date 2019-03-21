@@ -1,16 +1,16 @@
 import { Repository } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 
-import BasicController from '../api/basicController';
-import UserEntity from './../user/userEntity';
-import Hasher from '../utils/hasher';
+import { BasicController } from '../api';
+import { User } from './../user';
+import { Hasher } from '../utils';
 
-export default class UserGetController extends BasicController {
+export class LoginController extends BasicController {
   path: string;
-  repository: Repository<UserEntity>;
+  repository: Repository<User>;
   hasher: Hasher;
 
-  constructor(path: string, repository: Repository<UserEntity>, hasher: Hasher) {
+  constructor(path: string, repository: Repository<User>, hasher: Hasher) {
     super('POST', path);
     this.repository = repository;
     this.hasher = hasher;

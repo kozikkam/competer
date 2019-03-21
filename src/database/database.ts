@@ -1,10 +1,10 @@
 import { createConnection, ConnectionOptions, Connection } from 'typeorm';
 
-import UserEntity from './../user/userEntity';
-import MatchEntity from './../match/matchEntity';
-import ParticipantEntity from './../participant/participantEntity';
+import { User } from './../user';
+import { Match } from './../match';
+import { Participant } from './../participant';
 
-export default class Database {
+export class Database {
   async getConnection(): Promise<Connection> {
     const options: ConnectionOptions = {
       type: 'postgres',
@@ -14,9 +14,9 @@ export default class Database {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [
-        UserEntity,
-        MatchEntity,
-        ParticipantEntity,
+        User,
+        Match,
+        Participant,
       ],
       synchronize: true,
     };

@@ -1,6 +1,6 @@
-import BasicController from './basicController';
+import { BasicController } from './';
 
-export default class ControllerManager {
+export class ControllerManager {
   app: any;
   validator: any;
 

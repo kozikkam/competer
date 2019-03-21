@@ -1,6 +1,6 @@
 import 'jest';
 
-import MatchSeeder from './matchSeeder';
+import { MatchSeeder } from './';
 
 describe('Match Seeder', () => {
   let matchSeeder;

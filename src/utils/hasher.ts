@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-export default class Hasher {
+export class Hasher {
   hash(password: string, salt: string): Promise<string> {
     return new Promise(async (resolve, reject) => {
       crypto.pbkdf2(password, salt, 100000, 64, 'sha512', (err, buf) => {

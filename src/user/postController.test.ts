@@ -1,6 +1,6 @@
 import 'jest';
 
-import PostController from './postController';
+import { UserPostController } from './';
 
 describe('User PostController', () => {
   let postController;
@@ -21,7 +21,7 @@ describe('User PostController', () => {
       hash: () => {},
     };
 
-    postController = new PostController('', repository, hasher);
+    postController = new UserPostController('', repository, hasher);
   });
 
   it('should save request body', async () => {

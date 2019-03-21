@@ -1,25 +1,25 @@
 import { Repository } from 'typeorm';
 
 
-import EloUpdaterInterface from './eloUpdaterInterface';
+import { EloUpdaterInterface } from './';
 
-import ParticipantEntity from './../participant/participantEntity';
-import UserEntity from './../user/userEntity';
+import { Participant } from './../participant';
+import { User } from './../user';
 
-export default class EloUpdater implements EloUpdaterInterface {
-  userRepository: Repository<UserEntity>;
+export class EloUpdater implements EloUpdaterInterface {
+  userRepository: Repository<User>;
 
-  constructor(userRepository: Repository<UserEntity>) {
+  constructor(userRepository: Repository<User>) {
     this.userRepository = userRepository;
   }
 
-  async updateAll(participants: Array<ParticipantEntity>, value: number) {
+  async updateAll(participants: Array<Participant>, value: number) {
     for (const participant of participants) {
       await this.updateSingle(participant, value);
     }
   }
 
-  async updateSingle(participant: ParticipantEntity, value: number) {
+  async updateSingle(participant: Participant, value: number) {
     let eloChange = value;
 
     if (!participant.winner && eloChange > 0) {

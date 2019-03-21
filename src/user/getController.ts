@@ -1,13 +1,13 @@
 import { Repository } from 'typeorm';
 
-import BasicController from '../api/basicController';
-import UserEntity from './userEntity';
+import { BasicController } from '../api';
+import { User } from './';
 
-export default class UserGetController extends BasicController {
+export class UserGetController extends BasicController {
   path: string;
-  repository: Repository<UserEntity>;
+  repository: Repository<User>;
 
-  constructor(path: string, repository: Repository<UserEntity>) {
+  constructor(path: string, repository: Repository<User>) {
     super('GET', path);
     this.repository = repository;
   }

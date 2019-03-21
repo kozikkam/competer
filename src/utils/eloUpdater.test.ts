@@ -1,8 +1,8 @@
 import 'jest';
 
-import EloUpdater from './eloUpdater';
-import Participant from './../participant/participantEntity';
-import User from './../user/userEntity';
+import { EloUpdater } from './';
+import { Participant } from './../participant';
+import { User } from './../user/userEntity';
 
 describe('Unit tests - EloCalculator', () => {
   let eloUpdater;

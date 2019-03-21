@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 
-export default class AuthMiddleware {
+export class AuthMiddleware {
   verify(loginRoute: string) {
     return (req, res, next) => {
       if (req.url === loginRoute) {

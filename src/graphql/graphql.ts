@@ -3,7 +3,7 @@ import * as expressGraphql from 'express-graphql';
 
 const { buildSchema } = graphql;
 
-export default class Graphql {
+export class Graphql {
   app: any;
 
   constructor(app) {

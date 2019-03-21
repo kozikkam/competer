@@ -1,11 +1,11 @@
 import { Repository, DeepPartial } from 'typeorm';
 
-import User from './userEntity';
+import { User } from './';
 
-import BasicController from './../api/basicController';
-import Hasher from '../utils/hasher';
+import { BasicController } from './../api';
+import { Hasher } from '../utils';
 
-export default class UserPostController extends BasicController {
+export class UserPostController extends BasicController {
   path: string;
   repository: Repository<User>;
   hasher: Hasher;

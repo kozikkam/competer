@@ -1,8 +1,8 @@
 import 'jest';
 
-import EloCalculator from './eloCalculator';
-import Participant from './../participant/participantEntity';
-import User from './../user/userEntity';
+import { EloCalculator } from './';
+import { Participant } from './../participant';
+import { User } from './../user';
 
 describe('EloCalculator', () => {
   let eloCalculator;

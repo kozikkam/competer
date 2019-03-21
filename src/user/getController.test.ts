@@ -1,7 +1,6 @@
 import 'jest';
 
-import GetController from './getController';
-import User from './userEntity';
+import { UserGetController, User } from './';
 
 describe('User GetController', () => {
   let getController;
@@ -32,7 +31,7 @@ describe('User GetController', () => {
     user.lastName = 'Carlos';
     user.elo = 1000;
 
-    getController = new GetController('', repository);
+    getController = new UserGetController('', repository);
   });
 
   it('should send one user', async () => {

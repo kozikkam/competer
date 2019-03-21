@@ -1,7 +1,7 @@
-import BasicController from '../api/basicController';
-import MatchCreator from './matchCreator';
+import { BasicController } from '../api';
+import { MatchCreator } from './';
 
-export default class MatchPostController extends BasicController {
+export class MatchPostController extends BasicController {
   path: string;
   matchCreator: MatchCreator;
 

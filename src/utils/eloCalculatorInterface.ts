@@ -1,5 +1,5 @@
-import ParticipantEntity from './../participant/participantEntity';
+import { Participant } from './../participant';
 
-export default interface EloCalculatorInterface {
-  calculate(participants: Array<ParticipantEntity>): number;
+export interface EloCalculatorInterface {
+  calculate(participants: Array<Participant>): number;
 }

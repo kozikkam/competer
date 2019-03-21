@@ -1,12 +1,12 @@
 import { Repository } from 'typeorm';
 
-import UserEntity from '../user/userEntity';
+import { User } from '../user';
 
-export default class UserSeeder {
-  userRepository: Repository<UserEntity>;
+export class UserSeeder {
+  userRepository: Repository<User>;
 
   constructor(
-    userRepository: Repository<UserEntity>,
+    userRepository: Repository<User>,
   ) {
     this.userRepository = userRepository;
   }

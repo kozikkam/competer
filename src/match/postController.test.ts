@@ -1,6 +1,6 @@
 import 'jest';
 
-import PostController from './postController';
+import { MatchPostController } from './';
 
 describe('Match Post Controller', () => {
   let controller;
@@ -19,7 +19,7 @@ describe('Match Post Controller', () => {
     };
     res = new resClass();
 
-    controller = new PostController('', matchCreator);
+    controller = new MatchPostController('', matchCreator);
   });
 
   it('should call matchCreator and send result', async () => {

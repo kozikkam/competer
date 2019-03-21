@@ -1,15 +1,15 @@
-import EloCalculatorInterface from './eloCalculatorInterface';
+import { EloCalculatorInterface } from './';
 
-import ParticipantEntity from './../participant/participantEntity';
+import { Participant } from './../participant';
 
-export default class EloCalculator implements EloCalculatorInterface {
+export class EloCalculator implements EloCalculatorInterface {
   K: number;
 
   constructor(K: number) {
     this.K = K;
   }
 
-  calculate(participants: Array<ParticipantEntity>): number {
+  calculate(participants: Array<Participant>): number {
     const winners = this.getGroup(participants, true);
     const losers = this.getGroup(participants, false);
 
@@ -22,7 +22,7 @@ export default class EloCalculator implements EloCalculatorInterface {
     return Math.round(eloDifferences[0]);
   }
 
-  getGroup(participants: Array<ParticipantEntity>, winners: boolean): Array<ParticipantEntity> {
+  getGroup(participants: Array<Participant>, winners: boolean): Array<Participant> {
     return participants.filter(participant => participant.winner === winners);
   }
 
@@ -30,7 +30,7 @@ export default class EloCalculator implements EloCalculatorInterface {
     return participants.reduce((acc, participant) => acc + participant.user.elo, 0);
   }
 
-  getTotalRatings(winners: Array<ParticipantEntity>, losers: Array<ParticipantEntity>): Array<number> {
+  getTotalRatings(winners: Array<Participant>, losers: Array<Participant>): Array<number> {
     const winnersElo = this.getTotalRating(winners);
     const losersElo = this.getTotalRating(losers);
 

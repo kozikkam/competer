@@ -7,10 +7,10 @@ import {
   Column,
 } from 'typeorm';
 
-import ParticipantEntity from './../participant/participantEntity';
+import { Participant } from './../participant';
 
 @Entity()
-export default class Match {
+export class Match {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -23,6 +23,6 @@ export default class Match {
     @Column({ default: new Date() })
     date?: Date;
 
-    @OneToMany(type => ParticipantEntity, participant => participant.match, { cascade: true })
-    participants: ParticipantEntity[];
+    @OneToMany(type => Participant, participant => participant.match, { cascade: true })
+    participants: Participant[];
 }

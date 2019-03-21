@@ -1,12 +1,11 @@
 import { Repository } from 'typeorm';
 
-import UserSeeder from './userSeeder';
-import MatchSeeder from './matchSeeder';
+import { UserSeeder, MatchSeeder } from './';
 
-import MatchCreator from './../match/matchCreator';
-import User from './../user/userEntity';
+import { MatchCreator } from './../match';
+import { User } from './../user';
 
-export default class Seeder {
+export class Seeder {
   userRepository: Repository<User>;
   matchCreator: MatchCreator;
 

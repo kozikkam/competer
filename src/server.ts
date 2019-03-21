@@ -1,44 +1,27 @@
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as Ajv from 'ajv';
+import { Connection, Repository } from 'typeorm';
+import * as express from 'express';
 
 import * as config from './../config';
-import EnvValidator from './config/envValidator';
+import { EnvValidator } from './config/envValidator';
 
 const envValidator = new EnvValidator(config.requiredEnvs);
 envValidator.validateEnv();
 
-import * as express from 'express';
-
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
 
-import Database from './database/database';
-import UserEntity from './user/userEntity';
-import MatchEntity from './match/matchEntity';
-import ParticipantEntity from './participant/participantEntity';
-
-import ControllerManager from './api/controllerManager';
-import LoginController from './authorization/loginController';
-import UserGetController from './user/getController';
-import UserPostController from './user/postController';
-import MatchPostController from './match/postController';
-import MatchGetController from './match/getController';
-import BasicController from './api/basicController';
-
-import MatchCreator from './match/matchCreator';
-
-import EloCalculator from './utils/eloCalculator';
-import EloUpdater from './utils/eloUpdater';
-import Hasher from './utils/hasher';
-
-import { Connection, Repository } from 'typeorm';
-
-import Seeder from './seed/seeder';
-
-import AuthMiddleware from './authorization/authMiddleware';
-
-import Graphql from './graphql/graphql';
+import { Database } from './database';
+import { User, UserGetController, UserPostController } from './user';
+import { Match, MatchGetController, MatchPostController, MatchCreator } from './match';
+import { Participant } from './participant';
+import { BasicController, ControllerManager } from './api';
+import { LoginController, AuthMiddleware } from './authorization';
+import { EloCalculator, EloUpdater, Hasher } from './utils';
+import { Seeder } from './seed';
+import { Graphql } from './graphql';
 
 async function bootstrap(): Promise<void> {
   const authMiddleware = new AuthMiddleware();
@@ -53,9 +36,9 @@ async function bootstrap(): Promise<void> {
   const database: Database = new Database();
   const connection: Connection = await database.getConnection();
 
-  const userRepository: Repository<UserEntity> = connection.getRepository('user');
-  const matchRepository: Repository<MatchEntity> = connection.getRepository('match');
-  const participantRepository: Repository<ParticipantEntity> = connection.getRepository('participant');
+  const userRepository: Repository<User> = connection.getRepository('user');
+  const matchRepository: Repository<Match> = connection.getRepository('match');
+  const participantRepository: Repository<Participant> = connection.getRepository('participant');
 
   const eloCalculator = new EloCalculator(100);
   const eloUpdater = new EloUpdater(userRepository);

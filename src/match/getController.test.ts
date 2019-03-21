@@ -1,6 +1,6 @@
 import 'jest';
 
-import GetController from './getController';
+import { MatchGetController } from './';
 
 describe('Match Get Controller', () => {
   let controller;
@@ -29,7 +29,7 @@ describe('Match Get Controller', () => {
     repository = new repositoryClass();
     res = new resClass();
 
-    controller = new GetController('', repository);
+    controller = new MatchGetController('', repository);
   });
 
   it('should find one if id specified', async () => {

@@ -1,13 +1,13 @@
 import { Repository } from 'typeorm';
 
-import BasicController from '../api/basicController';
-import MatchEntity from './matchEntity';
+import { BasicController } from '../api';
+import { Match } from './';
 
-export default class MatchGetController extends BasicController {
+export class MatchGetController extends BasicController {
   path: string;
-  repository: Repository<MatchEntity>;
+  repository: Repository<Match>;
 
-  constructor(path: string, repository: Repository<MatchEntity>) {
+  constructor(path: string, repository: Repository<Match>) {
     super('GET', path);
     this.repository = repository;
   }

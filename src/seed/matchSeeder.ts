@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 
-import UserEntity from './../user/userEntity';
-import MatchCreator from '../match/matchCreator';
+import { User } from './../user';
+import { MatchCreator } from '../match';
 
 interface match {
   date: string;
@@ -13,12 +13,12 @@ interface participants {
   lose: Array<string>;
 }
 
-export default class UserSeeder {
-  userRepository: Repository<UserEntity>;
+export class MatchSeeder {
+  userRepository: Repository<User>;
   matchCreator: MatchCreator;
 
   constructor(
-    userRepository: Repository<UserEntity>,
+    userRepository: Repository<User>,
     matchCreator: MatchCreator,
   ) {
     this.userRepository = userRepository;
@@ -35,7 +35,7 @@ export default class UserSeeder {
     }
   }
 
-  async getUser(userName): Promise<UserEntity> {
+  async getUser(userName): Promise<User> {
     const [firstName, lastName] = userName.split(/\s/);
       
     const user = await this.userRepository.find({
@@ -48,7 +48,7 @@ export default class UserSeeder {
     return user[0];
   }
 
-  async getUsers(participantNames): Promise<Array<UserEntity>> {
+  async getUsers(participantNames): Promise<Array<User>> {
     const users = [];
 
     for (const name of participantNames) {

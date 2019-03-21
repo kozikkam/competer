@@ -1,23 +1,22 @@
 import { Repository } from 'typeorm';
 
-import MatchEntity from './matchEntity';
-import ParticipantEntity from '../participant/participantEntity';
-import UserEntity from '../user/userEntity';
+import { Match } from './';
+import { Participant } from '../participant';
+import { User } from '../user';
 
-import EloCalculatorInterface from './../utils/eloCalculatorInterface';
-import EloUpdaterInterface from './../utils/eloUpdaterInterface';
+import { EloCalculatorInterface, EloUpdaterInterface } from './../utils';
 
-export default class MatchCreator {
-  matchRepository: Repository<MatchEntity>;
-  participantRepository: Repository<ParticipantEntity>;
-  userRepository: Repository<UserEntity>;
+export class MatchCreator {
+  matchRepository: Repository<Match>;
+  participantRepository: Repository<Participant>;
+  userRepository: Repository<User>;
   eloCalculator: EloCalculatorInterface;
   eloUpdater: EloUpdaterInterface;
 
   constructor(
-    matchRepository: Repository<MatchEntity>,
-    participantRepository: Repository<ParticipantEntity>,
-    userRepository: Repository<UserEntity>,
+    matchRepository: Repository<Match>,
+    participantRepository: Repository<Participant>,
+    userRepository: Repository<User>,
     eloCalculator: EloCalculatorInterface,
     eloUpdater: EloUpdaterInterface,
   ) {

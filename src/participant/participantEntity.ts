@@ -1,18 +1,18 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
-import UserEntity from './../user/userEntity';
-import MatchEntity from './../match/matchEntity';
+import { User } from './../user';
+import { Match } from './../match';
 
 @Entity()
-export default class Participant {
+export class Participant {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(type => UserEntity, user => user.participants)
-    user: UserEntity;
+    @ManyToOne(type => User, user => user.participants)
+    user: User;
 
-    @ManyToOne(type => MatchEntity, match => match.participants)
-    match: MatchEntity;
+    @ManyToOne(type => Match, match => match.participants)
+    match: Match;
 
     @Column()
     previousElo: number;

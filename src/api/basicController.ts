@@ -1,4 +1,4 @@
-export default class BasicController {
+export class BasicController {
   method: string;
   path: string;
 

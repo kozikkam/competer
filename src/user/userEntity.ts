@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, RelationCount } from 'typeorm';
 
-import ParticipantEntity from './../participant/participantEntity';
+import { Participant } from '../participant';
 
 @Entity()
-export default class User {
+export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -28,6 +28,6 @@ export default class User {
     @Column({ default: 1000 })
     elo?: number;
 
-    @OneToMany(type => ParticipantEntity, participant => participant.user)
-    participants?: ParticipantEntity[];
+    @OneToMany(type => Participant, participant => participant.user)
+    participants?: Participant[];
 }
