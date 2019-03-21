@@ -24,6 +24,7 @@ import UserGetController from './user/getController';
 import UserPostController from './user/postController';
 import MatchPostController from './match/postController';
 import MatchGetController from './match/getController';
+import BasicController from './api/basicController';
 
 import MatchCreator from './match/matchCreator';
 
@@ -33,11 +34,11 @@ import Hasher from './utils/hasher';
 
 import { Connection, Repository } from 'typeorm';
 
-import BasicController from './api/basicController';
-
 import Seeder from './seed/seeder';
 
 import AuthMiddleware from './authorization/authMiddleware';
+
+import Graphql from './graphql/graphql';
 
 async function bootstrap(): Promise<void> {
   const authMiddleware = new AuthMiddleware();
@@ -83,6 +84,9 @@ async function bootstrap(): Promise<void> {
   const validator = new Ajv();
   const controllerManager = new ControllerManager(app, validator);
   controllerManager.addControllers(controllers);
+
+  const graphql = new Graphql(app);
+  graphql.init(userGetController);
 
   app.listen(port, async () => {
     console.log(`app listening on port ${port}`);
