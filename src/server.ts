@@ -1,5 +1,4 @@
 import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
 import * as Ajv from 'ajv';
 import { Connection, Repository } from 'typeorm';
 import * as express from 'express';
@@ -30,7 +29,6 @@ async function bootstrap(): Promise<void> {
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded());
-  app.use(cookieParser());
   app.use(authMiddleware.verify(loginRoute));
 
   const database: Database = new Database();
