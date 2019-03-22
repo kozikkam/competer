@@ -22,9 +22,6 @@ export class User {
   @Column({ nullable: true })
   salt: string;
 
-  @RelationCount((user: User) => user.participants)
-  matchCount: number;
-
   @Column({ default: 1000 })
   elo?: number;
 
