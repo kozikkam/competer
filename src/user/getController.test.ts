@@ -23,7 +23,7 @@ describe('User GetController', () => {
 
       getOne() { return this; }
 
-      find() { return this; }
+      query() { return this; }
     };
     repository = new repositoryClass();
     user = new User();
@@ -58,7 +58,7 @@ describe('User GetController', () => {
 
   it('should send all users', async () => {
     const req = { params: {} };
-    jest.spyOn(repository, 'find').mockImplementation(() => [user]);
+    jest.spyOn(repository, 'query').mockImplementation(() => [user]);
     const resSend = jest.spyOn(res, 'send');
 
     await getController.handle(req, res);

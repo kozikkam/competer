@@ -41,10 +41,24 @@ export class UserGetController extends BasicController {
 
       return res.send(rows);
     }
-    rows = await this.repository.find({
-      select: ['firstName', 'lastName', 'elo'],
-      order: { elo: 'DESC' }
-    });
+
+    rows = await this.repository
+      .query(`
+        SELECT "user".*, ROUND("user".winCount * 1.0 / "user".matchCount * 100, 2) as winPercentage
+        FROM (
+          SELECT u."firstName", u."lastName", u."elo", COUNT(u."id") as matchCount,
+            ( SELECT COUNT(usr."id")
+              FROM "user" usr
+              INNER JOIN participant ON participant."userId" = usr."id"
+              WHERE participant.winner = true AND usr."id" = u."id"
+              GROUP BY usr."id"
+            ) as winCount
+          FROM "user" u
+          INNER JOIN participant p ON u."id" = p."userId"
+          GROUP BY u."id"
+        ) "user"
+        ORDER BY "user"."elo" DESC
+      `);
 
     return res.send(rows);
   }
