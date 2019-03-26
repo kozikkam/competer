@@ -27,13 +27,18 @@ import { Graphql } from './graphql';
 async function bootstrap(): Promise<void> {
   const authMiddleware = new AuthMiddleware();
 
-  const loginRoute = '/login';
-
   app.use(helmet());
   app.use(cors());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded());
-  app.use(authMiddleware.verify(loginRoute));
+  app.use(authMiddleware.verify([
+    {
+      path: /user/, methods: ['POST', 'DELETE', 'PUT'],
+    },
+    {
+      path: /match/, methods: ['POST', 'DELETE', 'PUT'],
+    },
+  ]));
 
   const database: Database = new Database();
   const connection: Connection = await database.getConnection();
@@ -56,7 +61,7 @@ async function bootstrap(): Promise<void> {
   const matchPostController = new MatchPostController('/match', matchCreator);
   const matchGetController = new MatchGetController('/match/:id?', matchRepository);
 
-  const loginController = new LoginController(loginRoute, userRepository, hasher);
+  const loginController = new LoginController('/login', userRepository, hasher);
   
   const controllers: Array<BasicController> = [
     userGetController,

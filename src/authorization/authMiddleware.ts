@@ -1,9 +1,17 @@
 import * as jwt from 'jsonwebtoken';
 
+interface VerifiedRoutes {
+  path: RegExp;
+  methods: string[];
+}
+
 export class AuthMiddleware {
-  verify(loginRoute: string) {
+  verify(verifiedRoutes: VerifiedRoutes[]) {
     return (req, res, next) => {
-      if (req.url === loginRoute) {
+      if (verifiedRoutes.some(verifiedRoute => !!!(
+        verifiedRoute.path.exec(req.url)
+        && verifiedRoute.methods.includes(req.method)
+      ))) {
         return next();
       }
 
@@ -25,6 +33,10 @@ export class AuthMiddleware {
       
       return next();
     }
+  }
+
+  matches(requestUrl, regexp) {
+    return regexp.match(requestUrl);
   }
 
   failure(res) {
