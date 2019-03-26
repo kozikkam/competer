@@ -25,10 +25,12 @@ export class UserGetController extends BasicController {
           'participant.previousElo',
           'participant.newElo',
           'participant.eloChange',
+          'participant.winner',
           'match.date',
           'ps.previousElo',
           'ps.newElo',
           'ps.eloChange',
+          'ps.winner',
           'us.firstName',
           'us.lastName',
         ])
@@ -37,6 +39,7 @@ export class UserGetController extends BasicController {
         .leftJoin('match.participants', 'ps')
         .leftJoin('ps.user', 'us')
         .where({ id: req.params.id })
+        .orderBy( { date: 'DESC' })
         .getOne();
 
       return res.send(rows);
@@ -46,7 +49,7 @@ export class UserGetController extends BasicController {
       .query(`
         SELECT "user".*, ROUND("user".winCount * 1.0 / "user".matchCount * 100, 2) as winPercentage
         FROM (
-          SELECT u."firstName", u."lastName", u."elo", COUNT(u."id") as matchCount,
+          SELECT u."id", u."firstName", u."lastName", u."elo", COUNT(u."id") as matchCount,
             ( SELECT COUNT(usr."id")
               FROM "user" usr
               INNER JOIN participant ON participant."userId" = usr."id"

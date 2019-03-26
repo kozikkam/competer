@@ -2,6 +2,7 @@ import * as bodyParser from 'body-parser';
 import * as Ajv from 'ajv';
 import { Connection, Repository } from 'typeorm';
 import * as express from 'express';
+import * as cors from 'cors';
 
 import * as config from './../config';
 import { EnvValidator } from './config/envValidator';
@@ -27,6 +28,7 @@ async function bootstrap(): Promise<void> {
 
   const loginRoute = '/login';
 
+  app.use(cors());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded());
   app.use(authMiddleware.verify(loginRoute));
