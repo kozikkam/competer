@@ -12,7 +12,7 @@ const envValidator = new EnvValidator(config.requiredEnvs);
 envValidator.validateEnv();
 
 const app = express();
-const port = process.env.SERVER_PORT || 3000;
+const port = process.env.PORT || 3000;
 
 import { Database } from './database';
 import { User, UserGetController, UserPostController } from './user';
