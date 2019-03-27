@@ -33,13 +33,13 @@ export class LoginController extends BasicController {
     const user = await this.repository.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(403).send('Wrong username or password');
+      return res.status(403).send({ message: 'Wrong username or password' });
     }
     
     const equal = await this.hasher.isEqual(password, user.salt, user.password);
 
     if (!equal) {
-      return res.status(403).send('Wrong username or password');
+      return res.status(403).send({ message: 'Wrong username or password' });
     }
 
     const token = this.signJWT(email);
