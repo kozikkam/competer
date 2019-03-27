@@ -1,23 +1,23 @@
-import { Repository } from 'typeorm';
-
-import { User } from '../user';
+import { UserCreator } from '../user';
 
 export class UserSeeder {
-  userRepository: Repository<User>;
+  userCreator: UserCreator;
 
   constructor(
-    userRepository: Repository<User>,
+    userCreator: UserCreator,
   ) {
-    this.userRepository = userRepository;
+    this.userCreator = userCreator;
   }
 
   async seed(users: Array<string>): Promise<void> {
     for (const user of users) {
-      const [firstName, lastName] = user.split(/\s/);
+      const [firstName, lastName, email, password] = user.split(/\s/);
 
-      await this.userRepository.save({
+      await this.userCreator.create({
         firstName,
         lastName,
+        email,
+        password,
       });
     }
   }

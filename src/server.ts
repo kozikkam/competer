@@ -15,7 +15,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 import { Database } from './database';
-import { User, UserGetController, UserPostController } from './user';
+import { User, UserGetController, UserPostController, UserCreator } from './user';
 import { Match, MatchGetController, MatchPostController, MatchCreator } from './match';
 import { Participant } from './participant';
 import { BasicController, ControllerManager } from './api';
@@ -33,10 +33,7 @@ async function bootstrap(): Promise<void> {
   app.use(bodyParser.urlencoded());
   app.use(authMiddleware.verify([
     {
-      path: /user/, methods: ['POST', 'DELETE', 'PUT'],
-    },
-    {
-      path: /match/, methods: ['POST', 'DELETE', 'PUT'],
+      path: new RegExp('^(?!\/?login).*$'), methods: ['GET', 'POST', 'PUT', 'DELETE'],
     },
   ]));
 
@@ -56,7 +53,8 @@ async function bootstrap(): Promise<void> {
   );
 
   const userGetController = new UserGetController('/user/:id?', userRepository);
-  const userPostController = new UserPostController('/user', userRepository, hasher);
+  const userCreator = new UserCreator(hasher, userRepository);
+  const userPostController = new UserPostController('/user', userCreator);
 
   const matchPostController = new MatchPostController('/match', matchCreator);
   const matchGetController = new MatchGetController('/match/:id?', matchRepository);
@@ -81,7 +79,7 @@ async function bootstrap(): Promise<void> {
   app.listen(port, async () => {
     console.log(`app listening on port ${port}`);
 
-    const seeder = new Seeder(userRepository, matchCreator);
+    const seeder = new Seeder(matchCreator, userCreator, userRepository);
     await seeder.seed();
   });
 }

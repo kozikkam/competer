@@ -1,19 +1,17 @@
-import { Repository, DeepPartial } from 'typeorm';
+import { DeepPartial } from 'typeorm';
 
 import { User } from './';
 
 import { BasicController } from './../api';
-import { Hasher } from '../utils';
+import { UserCreator } from './userCreator';
 
 export class UserPostController extends BasicController {
   path: string;
-  repository: Repository<User>;
-  hasher: Hasher;
+  userCreator: UserCreator;
 
-  constructor(path, repository, hasher: Hasher) {
+  constructor(path: string, userCreator: UserCreator) {
     super('POST', path);
-    this.repository = repository;
-    this.hasher = hasher;
+    this.userCreator = userCreator;
   }
 
   get validation() {
@@ -33,16 +31,7 @@ export class UserPostController extends BasicController {
 
   async handle(req, res, next) {
     const userData: DeepPartial<User> = req.body;
-    const user: User = await this.repository.create(userData);
-    
-    let { password } = user;
-    if (password) {
-      const salt = await this.hasher.generateSalt();
-      user.password = await this.hasher.hash(password, salt);
-      user.salt = salt;
-    }
-
-    const savedUser = await this.repository.save(user);
+    const savedUser = await this.userCreator.create(userData);
 
     return res.send(savedUser);
   }
