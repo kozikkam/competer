@@ -54,7 +54,7 @@ export class LoginController extends BasicController {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: '10m',
+        expiresIn: '1m',
       },
     );
   }

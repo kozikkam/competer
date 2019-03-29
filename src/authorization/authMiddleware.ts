@@ -1,4 +1,5 @@
-import * as jwt from 'jsonwebtoken';
+import { TokenChecker } from './tokenChecker';
+import { TokenExtractor } from './tokenExtractor';
 
 interface VerifiedRoutes {
   path: RegExp;
@@ -6,6 +7,14 @@ interface VerifiedRoutes {
 }
 
 export class AuthMiddleware {
+  tokenChecker: TokenChecker;
+  tokenExtractor: TokenExtractor;
+
+  constructor(tokenChecker: TokenChecker, tokenExtractor: TokenExtractor) {
+    this.tokenChecker = tokenChecker;
+    this.tokenExtractor = tokenExtractor
+  }
+
   verify(verifiedRoutes: VerifiedRoutes[]) {
     return (req, res, next) => {
       if (verifiedRoutes.some(verifiedRoute => !!!(
@@ -14,44 +23,19 @@ export class AuthMiddleware {
       ))) {
         return next();
       }
+      const token = this.tokenExtractor.extract(req.headers);
 
-      let token = req.headers['authorization'] || req.headers['x-access-token'];
-
-      if (!token) {
-        return this.failure(res);
-      }
-
-      if (token.startsWith('Bearer')) {
-        token = this.getTokenFromHeader(token, res);
-      }
-  
       try {
-        jwt.verify(token, process.env.JWT_SECRET);
+        this.tokenChecker.check(token);
       } catch (err) {
-        return this.failure(res);
+        return res.status(401).send('Unauthorized');
       }
-      
+
       return next();
     }
   }
 
   matches(requestUrl, regexp) {
     return regexp.match(requestUrl);
-  }
-
-  failure(res) {
-    return res.status(401).send('Authorization failed');
-  }
-
-  getTokenFromHeader(header, res) {
-    let token = header.match(/\S+\s+(\S+)/);
-
-    if (!token) {
-      return this.failure(res);  
-    }
-
-    [token] = token.slice(-1);
-
-    return token;
   }
 }

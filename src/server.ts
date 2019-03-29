@@ -19,13 +19,16 @@ import { User, UserGetController, UserPostController, UserCreator } from './user
 import { Match, MatchGetController, MatchPostController, MatchCreator } from './match';
 import { Participant } from './participant';
 import { BasicController, ControllerManager } from './api';
-import { LoginController, AuthMiddleware } from './authorization';
+import { LoginController, AuthMiddleware, TokenChecker, TokenExtractor, CheckJWTController } from './authorization';
 import { EloCalculator, EloUpdater, Hasher } from './utils';
 import { Seeder } from './seed';
 import { Graphql } from './graphql';
 
 async function bootstrap(): Promise<void> {
-  const authMiddleware = new AuthMiddleware();
+  const tokenExtractor = new TokenExtractor();
+  const tokenChecker = new TokenChecker();
+  const checkJWTController = new CheckJWTController('/check-jwt', tokenChecker, tokenExtractor);
+  const authMiddleware = new AuthMiddleware(tokenChecker, tokenExtractor);
 
   app.use(helmet());
   app.use(cors());
@@ -62,6 +65,7 @@ async function bootstrap(): Promise<void> {
   const loginController = new LoginController('/login', userRepository, hasher);
   
   const controllers: Array<BasicController> = [
+    checkJWTController,
     userGetController,
     userPostController,
     matchPostController,
