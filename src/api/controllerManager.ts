@@ -28,7 +28,7 @@ export class ControllerManager {
         try {
           await controller.validate(req, res, next, this.validator);
         } catch (error) {
-          next(error);
+          return res.status(400).end();
         }
       },
     );
