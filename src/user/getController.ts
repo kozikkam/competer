@@ -1,21 +1,41 @@
 import { Repository } from 'typeorm';
 
-import { BasicController } from '../api';
-import { User } from './';
+import { User } from './'
+import { Participant } from './../participant';
+import { BasicController } from './../api';
+
+interface Response {
+  firstName: string;
+  lastName: string;
+  elo: number;
+  participants: Array<Participant>;
+}
 
 export class UserGetController extends BasicController {
   path: string;
   repository: Repository<User>;
+  pageSize: number;
 
-  constructor(path: string, repository: Repository<User>) {
+  constructor(path: string, repository: Repository<User>, pageSize = 10) {
     super('GET', path);
     this.repository = repository;
+    this.pageSize = pageSize;
+  }
+
+  getPage(rows: Response, page: number) {
+    return {
+      ...rows,
+      participants: rows.participants
+        .filter((participant, index) => index >= this.pageSize * (page-1) && index < this.pageSize * page)
+    };
   }
 
   async handle(req, res, next) {
     let rows;
 
     if (req.params.id) {
+      const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+
       rows = await this.repository
         .createQueryBuilder('user')
         .select([
@@ -41,6 +61,8 @@ export class UserGetController extends BasicController {
         .where({ id: req.params.id })
         .orderBy( { date: 'DESC' })
         .getOne();
+
+      rows = this.getPage(rows, page);
 
       return res.send(rows);
     }
