@@ -14,19 +14,17 @@ interface Response {
 export class UserGetController extends BasicController {
   path: string;
   repository: Repository<User>;
-  pageSize: number;
 
-  constructor(path: string, repository: Repository<User>, pageSize = 10) {
+  constructor(path: string, repository: Repository<User>) {
     super('GET', path);
     this.repository = repository;
-    this.pageSize = pageSize;
   }
 
-  getPage(rows: Response, page: number) {
+  getPage(rows: Response, page: number, pageSize: number) {
     return {
       ...rows,
       participants: rows.participants
-        .filter((participant, index) => index >= this.pageSize * (page-1) && index < this.pageSize * page)
+        .filter((participant, index) => index >= pageSize * (page-1) && index < pageSize * page)
     };
   }
 
@@ -35,6 +33,7 @@ export class UserGetController extends BasicController {
 
     if (req.params.id) {
       const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+      const pageSize = req.query.paseSize && req.query.pageSize > 0 ? req.query.pageSize : -1;
 
       rows = await this.repository
         .createQueryBuilder('user')
@@ -62,7 +61,9 @@ export class UserGetController extends BasicController {
         .orderBy( { date: 'DESC' })
         .getOne();
 
-      rows = this.getPage(rows, page);
+      if (pageSize !== -1) {
+        rows = this.getPage(rows, page, pageSize);
+      }
 
       return res.send(rows);
     }
