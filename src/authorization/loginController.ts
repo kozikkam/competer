@@ -23,12 +23,13 @@ export class LoginController extends BasicController {
       properties: {
         email: { type: 'string', format: 'email' },
         password: { type: 'string' },
+        remember: { type: 'boolean' },
       }
     };
   }
 
   async handle(req, res, next) {
-    const { email, password } = req.body;
+    const { email, password, remember } = req.body;
 
     const user = await this.repository.findOne({ where: { email } });
 
@@ -42,19 +43,24 @@ export class LoginController extends BasicController {
       return res.status(403).send({ message: 'Wrong username or password' });
     }
 
-    const token = this.signJWT(email);
+    let token;
+    if (remember) {
+      token = this.signJWT(email, '7d');
+    } else {
+      token = this.signJWT(email);
+    }
 
     res.status(200).send({ email, token });
   }
 
-  signJWT(email) {
+  signJWT(email, expiresIn = '10m') {
     return jwt.sign(
       {
         email,
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: '10m',
+        expiresIn,
       },
     );
   }
