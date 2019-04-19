@@ -3,6 +3,8 @@ Backend of Competer - an app dedicated to tracking competition between players i
 Competer uses elo score to rank players.
 Each match either adds or substracts from participants elo (depending on if they won or lost).
 
+It's counterpart is [Competer Frontend](https://github.com/kozikkam/competer-frontend)
+
 ## Technology stack
 - Node.js
 - Typescript
