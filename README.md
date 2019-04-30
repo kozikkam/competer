@@ -1,5 +1,5 @@
 # Competer
-Backend of Competer - an app dedicated to tracking competition between players in any domain.
+Backend of [Competer](https://github.com/kozikkam/competer-frontend) - an app dedicated to tracking competition between players in any domain.
 Competer uses elo score to rank players.
 Each match either adds or substracts from participants elo (depending on if they won or lost).
 
