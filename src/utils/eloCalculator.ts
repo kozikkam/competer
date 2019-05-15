@@ -4,9 +4,11 @@ import { Participant } from './../participant';
 
 export class EloCalculator implements EloCalculatorInterface {
   K: number;
+  capMin: number;
 
   constructor(K: number) {
     this.K = K;
+    this.capMin = K / 5;
   }
 
   calculate(participants: Array<Participant>): number {
@@ -16,10 +18,9 @@ export class EloCalculator implements EloCalculatorInterface {
     const ratings = this.getTotalRatings(winners, losers);
     const transformedRatings = this.getTransformedRatings(ratings);
     const expectedScores = this.getExpectedScores(transformedRatings);
-    const newRatings = this.getNewRatings(ratings, [1, 0], expectedScores);
-    const eloDifferences = this.getEloDifferences(ratings, newRatings);
+    const eloDifference = this.getEloDifferences(expectedScores[0]);
 
-    return Math.round(eloDifferences[0]);
+    return Math.round(eloDifference);
   }
 
   getGroup(participants: Array<Participant>, winners: boolean): Array<Participant> {
@@ -52,15 +53,17 @@ export class EloCalculator implements EloCalculatorInterface {
     return result;
   }
 
-  getNewRatings(ratings, scores, expected): Array<number> {
-    return ratings.map((rating, i) => {
-      return rating + this.K * (scores[i] - expected[i]);
-    })
-  }
+  getEloDifferences(expected): number {    
+    const eloDifference = Math.abs(this.K * (1 - expected));
 
-  getEloDifferences(ratings, newRatings): Array<number> {
-    return ratings.map((rating, i) => {
-      return newRatings[i] - rating;
-    })
+    if (eloDifference > this.K) {
+      return this.K;
+    }
+
+    if (eloDifference <= this.capMin && eloDifference >= 0) {
+      return this.capMin;
+    }
+
+    return eloDifference;
   }
 }
